@@ -36,12 +36,14 @@ async def on_message(message):
 
 def is_okuyasu_command(message):
     #TODO Check for user privileges
-    return message.content.lower().startswith('okuyasu')
+    if message.content.lower().startswith('okuyasu'):
+        author = message.author
+        if author.permissions_in(message.channel).administrator:
+            return True
+    return False
 
 
 async def delete_n_previous(message, num_to_delete):
-    #TODO get channel of message, get the messages to delete with
-    #channel.history(limit=num_to_delete, before=message
     channel = message.channel
     async for prev_message in channel.history(
         before=message, limit=num_to_delete):
