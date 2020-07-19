@@ -6,7 +6,7 @@ client = discord.Client()
 
 @client.event
 async def on_ready():
-    await db.get_connection
+    await db.get_connection()
 
 @client.event
 async def on_guild_join(guild):
