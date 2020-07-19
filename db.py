@@ -18,11 +18,19 @@ class PSQLConnectionSingleton:
         )
 
     async def ban_phrase(self, server_id, phrase):
-        stmt = await self.connection.execute(
+        await self.connection.execute(
             'INSERT INTO banned_phrases (discord_id, value)'
             + ' VALUES ($1, $2)',
             server_id, phrase
         )
+
+    async def create_server(server_id):
+        await self.connection.execute(
+            'INSERT INTO servers (discord_id) VALUES ($1)',
+            server_id
+        )
+
+db = PSQLConnectionSingleton()
 
 if __name__ == '__main__':
     async def main():
