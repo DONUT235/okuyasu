@@ -5,6 +5,10 @@ from db import db
 client = discord.Client()
 
 @client.event
+async def on_ready():
+    await db.get_connection
+
+@client.event
 async def on_guild_join(guild):
     #TODO Create Server Entry for this server.
     await db.create_server(str(guild.id))
