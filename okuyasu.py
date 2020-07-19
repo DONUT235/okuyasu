@@ -30,7 +30,7 @@ async def on_message(message):
         elif split_content[1] == 'delete':
             try:
                 num_to_delete = int(split_content[2])
-            except IndexError, ValueError:
+            except (IndexError, ValueError):
                 pass
             await delete_n_previous(message, num_to_delete)
 
