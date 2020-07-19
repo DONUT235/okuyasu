@@ -46,7 +46,8 @@ async def delete_n_previous(message, num_to_delete):
     async for prev_message in channel.history(
         before=message, limit=num_to_delete):
             await prev_message.delete()
-    await channel.send("Gotcha!")
+    await channel.send(file=discord.File('assets/hando.jpg'))
+    await channel.send(file=discord.File('assets/thankme.jpg'))
 
 if __name__ == '__main__':
     client.run(os.getenv("OKUYASU_TOKEN"))
