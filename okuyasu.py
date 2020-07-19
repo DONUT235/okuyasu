@@ -7,7 +7,7 @@ client = discord.Client()
 @client.event
 async def on_guild_join(guild):
     #TODO Create Server Entry for this server.
-    db.create_server(str(guild.id))
+    await db.create_server(str(guild.id))
 
 OKUYASU_HELP = """```okuyasu delete <n>: Delete the <n> most recent messages in this channel.
 okuyasu ban <phrase>: Ban a phrase.
