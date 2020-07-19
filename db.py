@@ -10,8 +10,25 @@ class PSQLConnectionSingleton:
             self.connection = await asyncpg.connect(database='okuyasu')
             print(self.connection)
 
-async def main():
-    conn = PSQLConnectionSingleton()
-    await conn.get_connection()
+    async def get_banned_words_for_server(self, server_id):
+        return await self.connection.fetch(
+            'SELECT * FROM banned_phrases'
+            + ' JOIN servers ON banned_phrases.discord_id = $1',
+            server_id
+        )
+
+    async def ban_phrase(self, server_id, phrase):
+        stmt = await self.connection.execute(
+            'INSERT INTO banned_phrases (discord_id, value)'
+            + ' VALUES ($1, $2)',
+            server_id, phrase
+        )
+
+if __name__ == '__main__':
+    async def main():
+        conn = PSQLConnectionSingleton()
+        await conn.get_connection()
+        for row in await conn.get_banned_words_for_server('123'):
+            print(row['value'])
 
 asyncio.run(main())
