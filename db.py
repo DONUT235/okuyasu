@@ -32,11 +32,11 @@ class PSQLConnectionSingleton:
 
 db = PSQLConnectionSingleton()
 
-if __name__ == '__main__':
-    async def main():
-        conn = PSQLConnectionSingleton()
-        await conn.get_connection()
-        for row in await conn.get_banned_words_for_server('123'):
-            print(row['value'])
+async def main():
+    conn = PSQLConnectionSingleton()
+    await conn.get_connection()
+    for row in await conn.get_banned_words_for_server('123'):
+        print(row['value'])
 
-asyncio.run(main())
+if __name__ == '__main__':
+    asyncio.run(main())
