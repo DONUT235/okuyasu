@@ -1,3 +1,4 @@
+import os
 import discord
 from db import db
 
