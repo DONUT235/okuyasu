@@ -1,4 +1,5 @@
 import asyncpg
+from asyncpg.exceptions import UniqueViolationError
 import asyncio
 
 class PSQLConnectionSingleton:
@@ -8,7 +9,7 @@ class PSQLConnectionSingleton:
     async def get_connection(self):
         if self.connection is None:
             self.connection = await asyncpg.connect(database='okuyasu')
-            print(self.connection)
+            print('Connected')
 
     async def get_banned_words_for_server(self, server_id):
         return await self.connection.fetch(
@@ -18,17 +19,23 @@ class PSQLConnectionSingleton:
         )
 
     async def ban_phrase(self, server_id, phrase):
-        await self.connection.execute(
-            'INSERT INTO banned_phrases (discord_id, value)'
-            + ' VALUES ($1, $2)',
-            server_id, phrase
-        )
+        try:
+            await self.connection.execute(
+                'INSERT INTO banned_phrases (discord_id, value)'
+                + ' VALUES ($1, $2)',
+                server_id, phrase
+            )
+        except UniqueViolationError:
+            pass
 
     async def create_server(self, server_id):
-        await self.connection.execute(
-            'INSERT INTO servers (discord_id) VALUES ($1)',
-            server_id
-        )
+        try:
+            await self.connection.execute(
+                'INSERT INTO servers (discord_id) VALUES ($1)',
+                server_id
+            )
+        except UniqueViolationError:
+            pass
 
 db = PSQLConnectionSingleton()
 
