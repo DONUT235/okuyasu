@@ -24,7 +24,7 @@ class PSQLConnectionSingleton:
             server_id, phrase
         )
 
-    async def create_server(server_id):
+    async def create_server(self, server_id):
         await self.connection.execute(
             'INSERT INTO servers (discord_id) VALUES ($1)',
             server_id
