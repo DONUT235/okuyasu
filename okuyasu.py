@@ -43,8 +43,8 @@ async def delete_n_previous(message, num_to_delete):
     #TODO get channel of message, get the messages to delete with
     #channel.history(limit=num_to_delete, before=message
     channel = message.channel
-    async for prev_message 
-        in channel.history(before=message, limit=num_to_delete):
+    async for prev_message in channel.history(
+        before=message, limit=num_to_delete):
             await prev_message.delete()
     await channel.send("Gotcha!")
 
