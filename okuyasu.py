@@ -42,7 +42,7 @@ async def handle_moderate_command(message):
     if message.guild is not None:
         server_id = str(message.guild.id)
         for banned_phrase in await db.get_banned_phrases_for_server(server_id):
-            pattern = r'\b'+re.escape(banned_phrase)+r'\b'
+            pattern = r'\b'+re.escape(banned_phrase['value'])+r'\b'
             if re.search(pattern, message.content.lower()):
                 await message.delete()
                 return
