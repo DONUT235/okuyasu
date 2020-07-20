@@ -28,10 +28,10 @@ async def on_message(message):
             except (IndexError, ValueError):
                 pass
             await delete_n_previous(message, num_to_delete)
-        elif split_content[1] == 'ban' && len(split_content) > 2:
+        elif split_content[1] == 'ban' and len(split_content) > 2:
             await handle_ban_command(message)
 
-        elif split_content[2] == 'unban' && len(split_content) > 2:
+        elif split_content[2] == 'unban' and len(split_content) > 2:
             await handle_unban_command(message)
     else:
         await handle_moderate_command(message)
