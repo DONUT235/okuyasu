@@ -11,10 +11,10 @@ class PSQLConnectionSingleton:
             self.connection = await asyncpg.connect(database='okuyasu')
             print('Connected')
 
-    async def get_banned_words_for_server(self, server_id):
+    async def get_banned_phrases_for_server(self, server_id):
         return await self.connection.fetch(
-            'SELECT * FROM banned_phrases'
-            + ' JOIN servers ON banned_phrases.discord_id = $1',
+            'SELECT value FROM banned_phrases'
+            + 'WHERE banned_phrases.discord_id = $1',
             server_id
         )
 
@@ -27,6 +27,12 @@ class PSQLConnectionSingleton:
             )
         except UniqueViolationError:
             pass
+
+    async def unban_phrase(self, server_id, phrase):
+        await self.connection.execute(
+            'DELETE FROM banned_phrases'
+            + ' WHERE discord_id = $1 AND value = $2',
+            server_id, phrase)
 
     async def create_server(self, server_id):
         try:

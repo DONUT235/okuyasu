@@ -33,6 +33,42 @@ async def on_message(message):
             except (IndexError, ValueError):
                 pass
             await delete_n_previous(message, num_to_delete)
+        elif split_content[1] == 'ban' && len(split_content) > 2:
+            await handle_ban_command(message)
+
+        elif split_content[2] == 'unban' && len(split_content) > 2:
+            await handle_unban_command(message)
+    else:
+        await handle_moderate_command(message)
+
+async def handle_moderate_command(message):
+    if message.guild is not None:
+        server_id = str(message.guild.id)
+        banned_phrases = await get_banned_phrases_for_server(server_id)
+
+async def handle_ban_command(message):
+    if message.guild is not None:
+        phrase_to_ban = message.content[len('okuyasu ban '):].strip().lower()
+
+        await db.ban_phrase(
+            message.guild.id, 
+            phrase_to_ban)
+
+        await message.channel.send(
+            f'The phrase `{phrase_to_ban}` is now banned.')
+
+
+async def handle_unban_command(message):
+    if message.guild is not None:
+        messy_phrase_to_unban = message.content[len('okuyasu unban '):]
+        phrase_to_unban = messy_phrase_to_unban.strip().lower()
+
+        await db.unban_phrase(
+            message.guild.id,
+            phrase_to_unban)
+
+        await message.channel.send(
+            f'The phrase `{phrase_to_unban}` is now unbanned.'.)
 
 def is_okuyasu_command(message):
     #TODO Check for user privileges
