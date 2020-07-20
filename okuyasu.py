@@ -8,11 +8,6 @@ client = discord.Client()
 async def on_ready():
     await db.get_connection()
 
-@client.event
-async def on_guild_join(guild):
-    #TODO Create Server Entry for this server.
-    await db.create_server(str(guild.id))
-
 OKUYASU_HELP = """```okuyasu delete <n>: Delete the <n> most recent messages in this channel.
 okuyasu ban <phrase>: Ban a phrase.
 okuyasu unban <phrase>: Make a phrase legal.```"""

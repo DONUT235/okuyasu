@@ -34,15 +34,6 @@ class PSQLConnectionSingleton:
             + ' WHERE discord_id = $1 AND value = $2',
             server_id, phrase)
 
-    async def create_server(self, server_id):
-        try:
-            await self.connection.execute(
-                'INSERT INTO servers (discord_id) VALUES ($1)',
-                server_id
-            )
-        except UniqueViolationError:
-            pass
-
 db = PSQLConnectionSingleton()
 
 async def main():
