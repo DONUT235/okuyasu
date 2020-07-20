@@ -67,7 +67,7 @@ async def handle_unban_command(message):
             phrase_to_unban)
 
         await message.channel.send(
-            f'The phrase `{phrase_to_unban}` is now unbanned.'.)
+            f'The phrase `{phrase_to_unban}` is now unbanned.')
 
 def is_okuyasu_command(message):
     #TODO Check for user privileges
