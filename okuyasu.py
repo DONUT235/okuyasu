@@ -1,5 +1,7 @@
-import os
 import discord
+import os
+import re
+
 from db import db
 
 client = discord.Client()
