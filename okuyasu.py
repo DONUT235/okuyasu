@@ -50,7 +50,7 @@ async def handle_ban_command(message):
         phrase_to_ban = message.content[len('okuyasu ban '):].strip().lower()
 
         await db.ban_phrase(
-            message.guild.id, 
+            str(message.guild.id), 
             phrase_to_ban)
 
         await message.channel.send(
@@ -63,7 +63,7 @@ async def handle_unban_command(message):
         phrase_to_unban = messy_phrase_to_unban.strip().lower()
 
         await db.unban_phrase(
-            message.guild.id,
+            str(message.guild.id),
             phrase_to_unban)
 
         await message.channel.send(
