@@ -33,7 +33,7 @@ async def on_message(message):
         elif split_content[1] == 'ban' and len(split_content) > 2:
             await handle_ban_command(message)
 
-        elif split_content[2] == 'unban' and len(split_content) > 2:
+        elif split_content[1] == 'unban' and len(split_content) > 2:
             await handle_unban_command(message)
     else:
         await handle_moderate_command(message)
