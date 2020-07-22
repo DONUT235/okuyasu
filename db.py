@@ -18,12 +18,12 @@ class PSQLConnectionSingleton:
             server_id
         )
 
-    async def ban_phrase(self, server_id, phrase):
+    async def ban_phrase(self, server_id, phrase, match_type='word'):
         try:
             await self.connection.execute(
-                'INSERT INTO banned_phrases (discord_id, value)'
-                + ' VALUES ($1, $2)',
-                server_id, phrase
+                'INSERT INTO banned_phrases (discord_id, value, match_type)'
+                + ' VALUES ($1, $2, $3)',
+                server_id, phrase, match_type
             )
         except UniqueViolationError:
             pass

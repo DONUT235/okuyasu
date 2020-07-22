@@ -55,7 +55,8 @@ async def handle_ban_command(message):
 
         await db.ban_phrase(
             str(message.guild.id), 
-            phrase_to_ban)
+            phrase_to_ban,
+            match_type='word')
 
         await message.channel.send(
             f'The phrase `{phrase_to_ban}` is now banned.')

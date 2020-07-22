@@ -16,6 +16,17 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: t_match_type; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.t_match_type AS ENUM (
+    'regex',
+    'word',
+    'word_part'
+);
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -27,7 +38,8 @@ SET default_table_access_method = heap;
 CREATE TABLE public.banned_phrases (
     value character varying,
     discord_id character varying,
-    id integer NOT NULL
+    id integer NOT NULL,
+    match_type public.t_match_type NOT NULL
 );
 
 
