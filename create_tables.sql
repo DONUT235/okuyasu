@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 12.3 (Debian 12.3-1.pgdg100+1)
--- Dumped by pg_dump version 12.3 (Debian 12.3-1.pgdg100+1)
+-- Dumped from database version 11.7 (Raspbian 11.7-0+deb10u1)
+-- Dumped by pg_dump version 11.7 (Raspbian 11.7-0+deb10u1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -29,7 +29,7 @@ CREATE TYPE public.t_match_type AS ENUM (
 
 SET default_tablespace = '';
 
-SET default_table_access_method = heap;
+SET default_with_oids = false;
 
 --
 -- Name: banned_phrases; Type: TABLE; Schema: public; Owner: -
