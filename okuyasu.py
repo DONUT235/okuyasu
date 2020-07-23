@@ -51,7 +51,7 @@ async def handle_moderate_command(message):
                 banned_phrase['value'])
             if re.search(
                     pattern,
-                    clean(message.clean_content):
+                    clean(message.clean_content)):
                 await message.delete()
                 await message.channel.send(
                     file=discord.File('assets/ideletedthispost.jpg'))
