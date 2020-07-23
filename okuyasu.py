@@ -3,7 +3,6 @@ import os
 import re
 
 from db import db
-from discord.utils import escape_markdown
 
 client = discord.Client()
 
@@ -24,7 +23,7 @@ async def on_message(message):
         return
 
     if is_okuyasu_command(message):
-        split_content = message.content.lower().split()
+        split_content = message.clean_content.lower().split()
         if len(split_content) < 2:
             return
         if split_content[1] == 'help':
@@ -59,7 +58,7 @@ async def handle_moderate_command(message):
                 return
 
 def clean(content):
-    return escape_markdown(content.strip().lower())
+    return content.strip().lower()
 
 def getMatchType(command):
     if command == 'ban':
@@ -92,11 +91,11 @@ async def handle_ban_command(message, command='ban'):
             match_type=match_type)
 
         await message.channel.send(
-            f'The phrase `{phrase_to_ban}` is now banned.')
+            f'The phrase "{phrase_to_ban}" is now banned.')
 
 async def handle_unban_command(message):
     if message.guild is not None:
-        messy_phrase_to_unban = message.content[len('okuyasu unban '):]
+        messy_phrase_to_unban = message.clean_content[len('okuyasu unban '):]
         phrase_to_unban = clean(messy_phrase_to_unban)
 
         await db.unban_phrase(
@@ -104,7 +103,7 @@ async def handle_unban_command(message):
             phrase_to_unban)
 
         await message.channel.send(
-            f'The phrase `{clean(phrase_to_unban)}` is now unbanned.')
+            f'The phrase "{clean(phrase_to_unban)}" is now unbanned.')
 
 def is_okuyasu_command(message):
     #TODO Check for user privileges
