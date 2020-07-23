@@ -63,11 +63,11 @@ def getMatchType(command):
         return 'word'
 
 def makeRegex(match_type, banned_phrase):
-    if command == 'ban':
+    if match_type == 'ban':
         return r'\b'+re.escape(banned_phrase['value'])+r'\b'
-    elif command == 'ban_containing':
+    elif match_type == 'ban_containing':
         return re.escape(banned_phrase['value'])
-    elif command == 'regex':
+    elif match_type == 'regex':
         return banned_phrase
 
 
