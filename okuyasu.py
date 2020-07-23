@@ -59,7 +59,8 @@ def getMatchType(command):
         return 'word_part'
     elif command == 'ban_regex':
         return 'regex'
-    else return 'word'
+    else:
+        return 'word'
 
 def makeRegex(match_type, banned_phrase):
     if command == 'ban':
