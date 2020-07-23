@@ -52,8 +52,9 @@ async def handle_moderate_command(message):
             if re.search(
                     pattern,
                     clean(message.clean_content)):
+                channel = message.channel
                 await message.delete()
-                await message.channel.send(
+                await channel.send(
                     file=discord.File('assets/ideletedthispost.jpg'))
                 return
 
@@ -116,10 +117,11 @@ def is_okuyasu_command(message):
 
 async def delete_n_previous(message, num_to_delete):
     channel = message.channel
+    delete_jobs = []
     async for prev_message in channel.history(
         before=message, limit=num_to_delete):
-            await prev_message.delete()
-    await message.delete()
+            delete_jobs.append(prev_message.delete())
+    asyncio.gather(message.delete(), *delete_jobs)
     await channel.send(file=discord.File('assets/hando.jpg'))
     await channel.send(file=discord.File('assets/thankme.jpg'))
 
