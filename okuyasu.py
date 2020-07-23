@@ -12,7 +12,10 @@ async def on_ready():
 
 OKUYASU_HELP = """```okuyasu delete <n>: Delete the <n> most recent messages in this channel.
 okuyasu ban <phrase>: Ban a phrase.
-okuyasu unban <phrase>: Make a phrase legal.```"""
+okuyasu unban <phrase>: Make a phrase legal.
+okuyasu ban_containing: Ban a sequence of letters, even if it occurs in the middle of a word.
+okuyasu ban_regex: Delete all messages matching a Python-flavored regular expression```"""
+BAN_COMMANDS = set(('ban', 'ban_containing', 'ban_regex'))
 @client.event
 async def on_message(message):
     if message.author == client.user:
@@ -30,8 +33,8 @@ async def on_message(message):
             except (IndexError, ValueError):
                 pass
             await delete_n_previous(message, num_to_delete)
-        elif split_content[1] == 'ban' and len(split_content) > 2:
-            await handle_ban_command(message)
+        elif split_content[1] in BAN_COMMANDS and len(split_content) > 2:
+            await handle_ban_command(message, command=split_content[1])
 
         elif split_content[1] == 'unban' and len(split_content) > 2:
             await handle_unban_command(message)
@@ -42,21 +45,39 @@ async def handle_moderate_command(message):
     if message.guild is not None:
         server_id = str(message.guild.id)
         for banned_phrase in await db.get_banned_phrases_for_server(server_id):
-            pattern = r'\b'+re.escape(banned_phrase['value'])+r'\b'
+            pattern = makeRegex(banned_phrase['match_type'], banned_phrase['value'])
             if re.search(pattern, message.content.lower()):
                 await message.delete()
                 await message.channel.send(
                     file=discord.File('assets/ideletedthispost.jpg'))
                 return
 
-async def handle_ban_command(message):
+def getMatchType(command):
+    if command == 'ban':
+        return 'word'
+    elif command == 'ban_containing':
+        return 'word_part'
+    elif command == 'ban_regex':
+        return 'regex'
+    else return 'word'
+
+def makeRegex(match_type, banned_phrase):
+    if command == 'ban':
+        return r'\b'+re.escape(banned_phrase['value'])+r'\b'
+    elif command == 'ban_containing':
+        return re.escape(banned_phrase['value'])
+    elif command == 'regex':
+        return banned_phrase
+
+
+async def handle_ban_command(message, command='ban'):
     if message.guild is not None:
-        phrase_to_ban = message.content[len('okuyasu ban '):].strip().lower()
+        phrase_to_ban = message.content[len(f'okuyasu {command} '):].strip().lower()
 
         await db.ban_phrase(
             str(message.guild.id), 
             phrase_to_ban,
-            match_type='word')
+            match_type=match_type)
 
         await message.channel.send(
             f'The phrase `{phrase_to_ban}` is now banned.')
