@@ -63,12 +63,12 @@ def getMatchType(command):
         return 'word'
 
 def makeRegex(match_type, banned_phrase):
-    if match_type == 'word':
-        return r'\b'+re.escape(banned_phrase)+r'\b'
-    elif match_type == 'word_part':
+    if match_type == 'word_part':
         return re.escape(banned_phrase)
-    elif match_type == 'regex':
+    if match_type == 'regex':
         return banned_phrase
+    else:
+        return r'\b'+re.escape(banned_phrase)+r'\b'
 
 
 async def handle_ban_command(message, command='ban'):
