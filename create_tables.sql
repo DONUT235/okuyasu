@@ -71,11 +71,11 @@ ALTER TABLE ONLY public.banned_phrases ALTER COLUMN id SET DEFAULT nextval('publ
 
 
 --
--- Name: banned_phrases banned_phrases_discord_id_value_key; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: banned_phrases banned_phrases_discord_id_value_match_type_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.banned_phrases
-    ADD CONSTRAINT banned_phrases_discord_id_value_key UNIQUE (discord_id, value);
+    ADD CONSTRAINT banned_phrases_discord_id_value_match_type_key UNIQUE (discord_id, value, match_type);
 
 
 --
