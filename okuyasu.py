@@ -75,6 +75,8 @@ async def handle_ban_command(message, command='ban'):
     if message.guild is not None:
         phrase_to_ban = message.content[len(f'okuyasu {command} '):].strip().lower()
 
+        match_type = getMatchType(command)
+
         await db.ban_phrase(
             str(message.guild.id), 
             phrase_to_ban,
