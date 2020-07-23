@@ -64,9 +64,9 @@ def getMatchType(command):
 
 def makeRegex(match_type, banned_phrase):
     if match_type == 'ban':
-        return r'\b'+re.escape(banned_phrase['value'])+r'\b'
+        return r'\b'+re.escape(banned_phrase)+r'\b'
     elif match_type == 'ban_containing':
-        return re.escape(banned_phrase['value'])
+        return re.escape(banned_phrase)
     elif match_type == 'regex':
         return banned_phrase
 
