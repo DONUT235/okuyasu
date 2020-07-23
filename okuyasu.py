@@ -3,6 +3,7 @@ import os
 import re
 
 from db import db
+from discord.utils import escape_markdown
 
 client = discord.Client()
 
@@ -16,6 +17,7 @@ okuyasu unban <phrase>: Make a phrase legal.
 okuyasu ban_containing: Ban a sequence of letters, even if it occurs in the middle of a word.
 okuyasu ban_regex: Delete all messages matching a Python-flavored regular expression```"""
 BAN_COMMANDS = set(('ban', 'ban_containing', 'ban_regex'))
+
 @client.event
 async def on_message(message):
     if message.author == client.user:
@@ -45,12 +47,19 @@ async def handle_moderate_command(message):
     if message.guild is not None:
         server_id = str(message.guild.id)
         for banned_phrase in await db.get_banned_phrases_for_server(server_id):
-            pattern = makeRegex(banned_phrase['match_type'], banned_phrase['value'])
-            if re.search(pattern, message.content.lower()):
+            pattern = makeRegex(
+                banned_phrase['match_type'],
+                banned_phrase['value'])
+            if re.search(
+                    pattern,
+                    clean(message.clean_content):
                 await message.delete()
                 await message.channel.send(
                     file=discord.File('assets/ideletedthispost.jpg'))
                 return
+
+def clean(content):
+    return escape_markdown(content.strip().lower())
 
 def getMatchType(command):
     if command == 'ban':
@@ -70,33 +79,32 @@ def makeRegex(match_type, banned_phrase):
     else:
         return r'\b'+re.escape(banned_phrase)+r'\b'
 
-
 async def handle_ban_command(message, command='ban'):
     if message.guild is not None:
-        phrase_to_ban = message.content[len(f'okuyasu {command} '):].strip().lower()
+        messy_phrase = message.content[len(f'okuyasu {command} '):]
+        phrase_to_ban = clean(messy_phrase)
 
         match_type = getMatchType(command)
 
         await db.ban_phrase(
-            str(message.guild.id), 
+            str(message.guild.id),
             phrase_to_ban,
             match_type=match_type)
 
         await message.channel.send(
             f'The phrase `{phrase_to_ban}` is now banned.')
 
-
 async def handle_unban_command(message):
     if message.guild is not None:
         messy_phrase_to_unban = message.content[len('okuyasu unban '):]
-        phrase_to_unban = messy_phrase_to_unban.strip().lower()
+        phrase_to_unban = clean(messy_phrase_to_unban)
 
         await db.unban_phrase(
             str(message.guild.id),
             phrase_to_unban)
 
         await message.channel.send(
-            f'The phrase `{phrase_to_unban}` is now unbanned.')
+            f'The phrase `{clean(phrase_to_unban)}` is now unbanned.')
 
 def is_okuyasu_command(message):
     #TODO Check for user privileges
