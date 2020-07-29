@@ -58,7 +58,8 @@ class HelpCommand(Command):
                 lambda command: not command.needs_guild, 
                 commands)
         help_messages = [command.help_line for command in commands]
-        await message.channel.send(f'```{"\n".join(help_messages)}```')
+        help_message = "\n".join(help_messages)
+        await message.channel.send(f'```{help_message}```')
 
 class NullCommand(Command):
     help_line = ''
