@@ -18,7 +18,7 @@ class Command(ABC):
         return ''
 
     @abstractmethod
-    async def execute(message):
+    async def execute(self, message):
         pass
 
     def get_args(self, message):
@@ -32,7 +32,7 @@ class DeleteNCommand(Command):
     help_line = 'Delete the <n> most recent messages in this channel.'
     name = 'delete'
 
-    async def execute(message):
+    async def execute(self, message):
         try:
             num_to_delete = self.get_args(message)
         except (IndexError, ValueError):
@@ -51,7 +51,7 @@ class HelpCommand(Command):
     help_line = 'Print this message.'
     name = 'help'
 
-    async def execute(message):
+    async def execute(self, message):
         commands = _COMMANDS.values()
         if message.guild is None:
             commands = filter(
@@ -64,7 +64,7 @@ class NullCommand(Command):
     help_line = ''
     name = 'null'
 
-    async def execute(message):
+    async def execute(self, message):
         pass
 
 class NeedsGuildCommand(Command):
@@ -76,7 +76,7 @@ class BanWordInDBCommand(NeedsGuildCommand):
     def match_type() -> match_type.MatchType:
         return None
 
-    async def execute(message):
+    async def execute(self, message):
         server_id = message.guild.id
         phrase_to_ban = self.get_args(message)
         if messy_phrase == '':
@@ -107,7 +107,7 @@ class UnbanCommand(NeedsGuildCommand):
     help_line = 'Make a phrase legal.'
     name = 'unban'
 
-    async def execute(message):
+    async def execute(self, message):
         phrase_to_unban = self.get_args(message)
 
         await db.unban_phrase(str(message.guild.id), phrase_to_unban)
