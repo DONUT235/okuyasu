@@ -16,7 +16,7 @@ class WordMatchType(MatchType):
     db_name = 'word'
 
     def make_regex(self, phrase):
-        return r'\b'+re.escape(banned_phrase)+r'\b'
+        return r'\b'+re.escape(phrase)+r'\b'
 
 class WordPartMatchType(MatchType):
     db_name = 'word_part'
@@ -28,7 +28,7 @@ class RegexMatchType(MatchType):
     db_name = 'regex'
 
     def make_regex(self, phrase):
-        return self
+        return phrase
 
 _MATCH_TYPES = [
     WordMatchType(),
