@@ -56,7 +56,5 @@ def is_okuyasu_command(message):
     return False
 
 
-async def delete_n_previous(message, num_to_delete):
-
 if __name__ == '__main__':
     client.run(os.getenv("OKUYASU_TOKEN"))
