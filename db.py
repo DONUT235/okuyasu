@@ -11,7 +11,7 @@ class PSQLConnectionSingleton:
             self.pool = await asyncpg.create_pool(database='okuyasu')
 
     async def get_banned_phrases_for_server(self, server_id):
-        async with pool.acquire() as connection:
+        async with self.pool.acquire() as connection:
             return await connection.fetch(
                 'SELECT value, match_type FROM banned_phrases'
                 + ' WHERE discord_id = $1',
@@ -20,7 +20,7 @@ class PSQLConnectionSingleton:
 
     async def ban_phrase(self, server_id, phrase, match_type='word'):
         try:
-            async with pool.acquire() as connection:
+            async with self.pool.acquire() as connection:
                 await self.connection.execute(
                     'INSERT INTO banned_phrases (discord_id, value, match_type)'
                     + ' VALUES ($1, $2, $3)',
@@ -30,7 +30,7 @@ class PSQLConnectionSingleton:
             pass
 
     async def unban_phrase(self, server_id, phrase):
-        async with pool.acquire() as connection:
+        async with self.pool.acquire() as connection:
             await self.connection.execute(
                 'DELETE FROM banned_phrases'
                 + ' WHERE discord_id = $1 AND value = $2',
