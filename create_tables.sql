@@ -23,7 +23,8 @@ SET row_security = off;
 CREATE TYPE public.t_match_type AS ENUM (
     'regex',
     'word',
-    'word_part'
+    'word_part',
+    'fuzzy'
 );
 
 
