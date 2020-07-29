@@ -1,2 +1,4 @@
 asyncpg
 discord.py
+fuzzywuzzy
+python-Levenshtein
