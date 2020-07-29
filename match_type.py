@@ -1,4 +1,7 @@
 from abc import ABC, abstractmethod
+
+import re
+
 class MatchType(ABC):
     @property
     @abstractmethod

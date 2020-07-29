@@ -3,6 +3,7 @@ from db import db
 from utilities import clean_string
 
 import asyncio
+import discord
 import match_type
 
 class Command(ABC):
