@@ -33,8 +33,9 @@ class DeleteNCommand(Command):
     name = 'delete'
 
     async def execute(self, message):
+        num_to_delete = self.get_args(message)
         try:
-            num_to_delete = self.get_args(message)
+            num_to_delete = int(num_to_delete)
         except (IndexError, ValueError):
             pass
 
@@ -80,7 +81,7 @@ class BanWordInDBCommand(NeedsGuildCommand):
     async def execute(self, message):
         server_id = message.guild.id
         phrase_to_ban = self.get_args(message)
-        if messy_phrase == '':
+        if phrase_to_ban == '':
             #This is potentially dangerous!
             return
         await db.ban_phrase(
