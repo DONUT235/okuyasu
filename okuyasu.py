@@ -29,7 +29,7 @@ async def on_message(message):
         if len(split_content) < 2:
             return
         command_name = split_content[1]
-        command = get_command(commandName)
+        command = get_command(command_name)
         if message.guild is not None or not command.needs_guild:
             await command.execute(message)
     else:
