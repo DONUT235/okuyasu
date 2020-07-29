@@ -47,8 +47,6 @@ async def handle_moderate_command(message):
                 await channel.send(
                     file=discord.File('assets/ideletedthispost.jpg'))
 
-async def handle_unban_command(message):
-
 def is_okuyasu_command(message):
     #TODO Check for user privileges
     if message.content.lower().startswith('okuyasu'):
