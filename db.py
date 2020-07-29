@@ -21,7 +21,7 @@ class PSQLConnectionSingleton:
     async def ban_phrase(self, server_id, phrase, match_type='word'):
         try:
             async with self.pool.acquire() as connection:
-                await self.connection.execute(
+                await connection.execute(
                     'INSERT INTO banned_phrases (discord_id, value, match_type)'
                     + ' VALUES ($1, $2, $3)',
                     server_id, phrase, match_type
@@ -31,7 +31,7 @@ class PSQLConnectionSingleton:
 
     async def unban_phrase(self, server_id, phrase):
         async with self.pool.acquire() as connection:
-            await self.connection.execute(
+            await connection.execute(
                 'DELETE FROM banned_phrases'
                 + ' WHERE discord_id = $1 AND value = $2',
                 server_id, phrase)
