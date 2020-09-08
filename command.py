@@ -167,7 +167,8 @@ _COMMANDS = [
     BanRegexCommand(),
     BanContainingCommand(),
     BanWordCommand(),
-    UnbanCommand()
+    UnbanCommand(),
+    WhatsBannedCommand()
 ]
 
 _COMMANDS = {command.name: command for command in _COMMANDS}
