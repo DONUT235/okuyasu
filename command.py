@@ -87,7 +87,7 @@ class BanCommand(NeedsGuildCommand):
             #This is potentially dangerous!
             return
         await db.ban_phrase(
-            str(server_id), phrase_to_ban, self.match_type.db_name)
+            str(server_id), phrase_to_ban, self.db_name)
 
         await message.channel.send(
             f'The phrase "{phrase_to_ban}" is now banned.')
