@@ -125,7 +125,7 @@ _COMMANDS = [
     DeleteNCommand(),
     BanRegexCommand(),
     BanContainingCommand(),
-    BanCommand(),
+    BanWordCommand(),
     UnbanCommand()
 ]
 
