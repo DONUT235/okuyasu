@@ -15,7 +15,7 @@ class PSQLConnectionSingleton:
             return await connection.fetch(
                 'SELECT value, match_type FROM banned_phrases'
                 + ' WHERE discord_id = $1',
-                server_id
+                str(server_id)
             )
 
     async def ban_phrase(self, server_id, phrase, match_type='word'):
@@ -41,7 +41,7 @@ db = PSQLConnectionSingleton()
 async def main():
     conn = PSQLConnectionSingleton()
     await conn.get_connection()
-    for row in await conn.get_banned_words_for_server('123'):
+    for row in await conn.get_banned_words_for_server(123):
         print(row['value'])
 
 if __name__ == '__main__':

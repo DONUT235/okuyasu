@@ -37,7 +37,7 @@ async def on_message(message):
 
 async def handle_moderate_command(message):
     if message.guild is not None:
-        server_id = str(message.guild.id)
+        server_id = message.guild.id
         for banned_phrase in await db.get_banned_phrases_for_server(server_id):
             match_type = get_match_type(
                 banned_phrase['match_type'], banned_phrase['value'])
