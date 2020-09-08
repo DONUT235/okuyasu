@@ -76,6 +76,9 @@ class NeedsGuildCommand(Command):
     needs_guild = True
 
 class WhatsBannedCommand(NeedsGuildCommand):
+    name = 'banlist'
+    help_line = 'DM you a list of the banned words for this server'
+
     async def execute(self, message):
         server_id = message.guild.id
         banned_phrases = await db.get_banned_phrases_for_server(server_id)
@@ -94,13 +97,16 @@ class WhatsBannedCommand(NeedsGuildCommand):
                     + ', even if they occur in the middle of a word:')
             elif key == db_names.REGEX:
                 response.append(
-                    'Messages matching the following patterns'
+                    'Messages matching the following regex patterns'
                     + ' will be deleted:')
                 banned_dict[key] = [
                     format_regex(phrase)
                     for phrase in banned_dict[key]
                 ]
             response.extend(banned_dict[key])
+
+        sender = message.author
+        await message.author.send('\n'.join(response))
 
 
 class BanCommand(NeedsGuildCommand):
