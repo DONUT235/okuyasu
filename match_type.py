@@ -2,41 +2,52 @@ from abc import ABC, abstractmethod
 
 import re
 
-class MatchType(ABC):
+class TextMatchStrategy(ABC):
+    def __init__(self, phrase):
+        self.phrase = phrase
+
     @property
     @abstractmethod
     def db_name(self) -> str:
         return ''
 
     @abstractmethod
+    def matches(self, text) -> bool:
+        return False
+
+class RegexTextMatch(TextMatchStrategy)
+    @abstractmethod
     def make_regex(self, phrase: str) -> str:
         return ''
 
-class WordMatchType(MatchType):
+    def matches(self, text):
+        return bool(re.search(self.make_regex(), text))
+
+class WholeWord(RegexTextMatch):
     db_name = 'word'
 
-    def make_regex(self, phrase):
-        return r'\b'+re.escape(phrase)+r'\b'
+    def make_regex(self):
+        return r'\b'+re.escape(self.phrase)+r'\b'
 
-class WordPartMatchType(MatchType):
+class WordPart(RegexTextMatch):
     db_name = 'word_part'
 
-    def make_regex(self, phrase):
-        return re.escape(phrase)
+    def make_regex(self):
+        return re.escape(self.phrase)
 
-class RegexMatchType(MatchType):
+class ArbitraryRegex(RegexTextMatch):
     db_name = 'regex'
 
-    def make_regex(self, phrase):
-        return phrase
+    def make_regex(self):
+        return self.phrase
 
 _MATCH_TYPES = [
-    WordMatchType(),
-    WordPartMatchType(),
-    RegexMatchType()
+    WholeWord,
+    WordPart,
+    ArbitraryRegex
 ]
 
 _MATCH_TYPES = {match_type.db_name: match_type for match_type in _MATCH_TYPES}
 
-def get_match_type(db_name):
-    return _MATCH_TYPES[db_name]
+def get_match_type(db_name, phrase):
+    return _MATCH_TYPES[db_name](phrase)
