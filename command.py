@@ -4,7 +4,7 @@ from utilities import clean_string
 
 import asyncio
 import discord
-import match_type
+import db_names
 
 class Command(ABC):
     needs_guild = False
@@ -74,10 +74,10 @@ class NullCommand(Command):
 class NeedsGuildCommand(Command):
     needs_guild = True
 
-class BanWordInDBCommand(NeedsGuildCommand):
+class BanCommand(NeedsGuildCommand):
     @property
     @abstractmethod
-    def match_type() -> match_type.MatchType:
+    def db_name(self) -> str:
         return None
 
     async def execute(self, message):
@@ -92,20 +92,20 @@ class BanWordInDBCommand(NeedsGuildCommand):
         await message.channel.send(
             f'The phrase "{phrase_to_ban}" is now banned.')
 
-class BanRegexCommand(BanWordInDBCommand):
+class BanRegexCommand(BanCommand):
     help_line = 'Delete all messages matching a Python-flavored regular expression.'
     name = 'ban_regex'
-    match_type = match_type.RegexMatchType()
+    db_name = db_names.REGEX
 
-class BanContainingCommand(BanWordInDBCommand):
+class BanContainingCommand(BanCommand):
     help_line = 'Ban a sequence of letters, even if it occurs in the middle of a word.'
     name = 'ban_containing'
-    match_type = match_type.WordPartMatchType()
+    db_name = db_names.WORD_PART
 
-class BanCommand(BanWordInDBCommand):
+class BanWordCommand(BanCommand):
     help_line = 'Ban a phrase.'
     name = 'ban'
-    match_type = match_type.WordMatchType()
+    db_name = db_names.WHOLE_WORD
 
 class UnbanCommand(NeedsGuildCommand):
     help_line = 'Make a phrase legal.'

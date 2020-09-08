@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 
 import re
 
+import db_names
+
 class TextMatchStrategy(ABC):
     def __init__(self, phrase):
         self.phrase = phrase
@@ -15,7 +17,7 @@ class TextMatchStrategy(ABC):
     def matches(self, text) -> bool:
         return False
 
-class RegexTextMatch(TextMatchStrategy)
+class RegexTextMatch(TextMatchStrategy):
     @abstractmethod
     def make_regex(self, phrase: str) -> str:
         return ''
@@ -24,19 +26,19 @@ class RegexTextMatch(TextMatchStrategy)
         return bool(re.search(self.make_regex(), text))
 
 class WholeWord(RegexTextMatch):
-    db_name = 'word'
+    db_name = db_names.WHOLE_WORD
 
     def make_regex(self):
         return r'\b'+re.escape(self.phrase)+r'\b'
 
 class WordPart(RegexTextMatch):
-    db_name = 'word_part'
+    db_name = db_names.WORD_PART
 
     def make_regex(self):
         return re.escape(self.phrase)
 
 class ArbitraryRegex(RegexTextMatch):
-    db_name = 'regex'
+    db_name = db_names.REGEX
 
     def make_regex(self):
         return self.phrase
