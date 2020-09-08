@@ -51,5 +51,5 @@ _MATCH_TYPES = [
 
 _MATCH_TYPES = {match_type.db_name: match_type for match_type in _MATCH_TYPES}
 
-def get_match_type(db_name, phrase):
-    return _MATCH_TYPES[db_name](phrase)
+def get_match_type(match_type_name, value):
+    return _MATCH_TYPES[match_type_name](value)
