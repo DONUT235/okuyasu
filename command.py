@@ -106,7 +106,10 @@ class WhatsBannedCommand(NeedsGuildCommand):
             response.extend(banned_dict[key])
 
         sender = message.author
-        await message.author.send('\n'.join(response))
+        if(response):
+            await message.author.send('\n'.join(response))
+        else:
+            await message.author.send('Nothing is currently banned.')
 
 
 class BanCommand(NeedsGuildCommand):
