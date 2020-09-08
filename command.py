@@ -125,10 +125,10 @@ class BanCommand(NeedsGuildCommand):
             str(server_id), phrase_to_ban, self.db_name)
 
         await message.channel.send(
-            f'The phrase "{self.format(phrase_to_ban)}" is now banned.')
+            f'The phrase {self.format(phrase_to_ban)} is now banned.')
 
     def format(self, phrase):
-        return phrase
+        return '"' + phrase + '"'
 
 class BanRegexCommand(BanCommand):
     help_line = 'Delete all messages matching a Python-flavored regular expression.'
