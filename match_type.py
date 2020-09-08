@@ -14,7 +14,7 @@ class TextMatchStrategy(ABC):
         return ''
 
     @abstractmethod
-    def matches(self, text) -> bool:
+    async def matches(self, text) -> bool:
         return False
 
 class RegexTextMatch(TextMatchStrategy):
@@ -22,7 +22,7 @@ class RegexTextMatch(TextMatchStrategy):
     def make_regex(self, phrase: str) -> str:
         return ''
 
-    def matches(self, text):
+    async def matches(self, text):
         return bool(re.search(self.make_regex(), text))
 
 class WholeWord(RegexTextMatch):

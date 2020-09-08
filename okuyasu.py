@@ -41,7 +41,7 @@ async def handle_moderate_command(message):
         for banned_phrase in await db.get_banned_phrases_for_server(server_id):
             match_type = get_match_type(
                 banned_phrase['match_type'], banned_phrase['value'])
-            if match_type.matches(clean_message(message)):
+            if await match_type.matches(clean_message(message)):
                 channel = message.channel
                 await message.delete()
                 await channel.send(
