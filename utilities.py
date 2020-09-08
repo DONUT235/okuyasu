@@ -7,4 +7,4 @@ def clean_message(message):
     return clean_string(message.clean_content)
 
 def format_regex(phrase):
-    return '`' + discord.utils.escape_markdown(phrase) + '`'
+    return '`' + phrase + '`'
