@@ -6,7 +6,7 @@ import asyncio
 from db import db
 
 from command import get_command
-from match_type import get_match_type
+from matchers import get_matcher
 from utilities import clean_message, clean_string
 
 client = discord.Client()
@@ -39,9 +39,9 @@ async def handle_moderate_command(message):
     if message.guild is not None:
         server_id = message.guild.id
         for banned_phrase in await db.get_banned_phrases_for_server(server_id):
-            match_type = get_match_type(
+            matcher = get_matcher(
                 banned_phrase['match_type'], banned_phrase['value'])
-            if await match_type.matches(clean_message(message)):
+            if await matcher.matches(clean_message(message)):
                 channel = message.channel
                 await message.delete()
                 await channel.send(

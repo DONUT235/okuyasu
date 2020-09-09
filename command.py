@@ -5,7 +5,6 @@ from utilities import clean_string, format_regex
 import asyncio
 import discord
 import db_names
-import match_type
 
 class Command(ABC):
     needs_guild = False
