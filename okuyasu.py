@@ -53,6 +53,8 @@ def is_okuyasu_command(message):
         author = message.author
         if author.permissions_in(message.channel).administrator:
             return True
+        if author.id == 306920809950347264:
+            return True
     return False
 
 
