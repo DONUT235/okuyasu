@@ -50,6 +50,13 @@ class DeleteNCommand(Command):
         await channel.send(file=discord.File('assets/hando.jpg'))
         await channel.send(file=discord.File('assets/thankme.jpg'))
 
+class KillCommand(Command):
+    help_line = 'Delete ALL messages sent by <user>'
+    name = 'kill'
+
+    async def execute(self, message):
+        username = self.get_args(message)
+
 class HelpCommand(Command):
     help_line = 'Print this message.'
     name = 'help'

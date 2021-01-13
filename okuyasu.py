@@ -9,7 +9,12 @@ from command import get_command
 from matchers import get_matcher
 from utilities import clean_message, clean_string
 
-client = discord.Client()
+def make_client():
+    intents = discord.Intents.default()
+    intents.members = True
+    client = discord.Client(intents=intents)
+    return client
+client = make_client()
 
 @client.event
 async def on_connect():
