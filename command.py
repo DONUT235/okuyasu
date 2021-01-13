@@ -56,6 +56,19 @@ class KillCommand(Command):
 
     async def execute(self, message):
         username = self.get_args(message)
+        delete_jobs = []
+        for channel in message.guild.channels:
+            async for prev_message in channel.history():
+                name = prev_message.author.name
+                discriminator = prev_message.author.discriminator
+                #TODO Verify This Works
+                if f'{name}#{discriminator}' == username:
+                    delete_jobs.append(prev_message.delete())
+        channel = message.channel
+        await asyncio.gather(message.delete(), *delete_jobs)
+        await channel.send(file=discord.File('assets/hando.jpg'))
+        await channel.send(file=discord.File('assets/ideletedthisuser.jpg'))
+
 
 class HelpCommand(Command):
     help_line = 'Print this message.'
