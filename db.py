@@ -39,12 +39,20 @@ class PSQLConnectionSingleton:
 
     async def can_kill(self, server_id):
         async with self.pool.acquire() as connection:
-            return await connection.fetch(
+            result = await connection.fetch(
                 'SELECT can_kill'
                 + ' FROM Permissions'
                 + ' WHERE discord_id = $1',
                 server_id
             )
+            if len(result) == 0:
+                await connection.execute(
+                    'INSERT INTO Permissions (discord_id, can_kill)'
+                    + ' VALUES ($1, FALSE)',
+                    server_id
+                )
+                return False
+            return result[0]['can_kill']
 
     async def disable_kill(self, server_id):
         async with self.pool.acquire() as connection:
