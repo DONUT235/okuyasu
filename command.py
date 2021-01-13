@@ -74,10 +74,16 @@ class KillCommand(Command):
                 #TODO Verify This Works
                 if f'{name}#{discriminator}' == username:
                     delete_jobs.append(prev_message.delete())
-        await asyncio.gather(db.disable_kill(server_id),
-                             *delete_jobs)
-        await channel.send(file=discord.File('assets/hando.jpg'))
-        await channel.send(file=discord.File('assets/ideletedthisuser.jpg'))
+        if(delete_jobs > 0):
+            await asyncio.gather(db.disable_kill(server_id),
+                                 *delete_jobs)
+            await channel.send(file=discord.File('assets/hando.jpg'))
+            await channel.send(file=discord.File('assets/ideletedthisuser.jpg'))
+        else:
+            await channel.send("I couldn't find anything."
+                               + " Usernames must match EXACTLY,"
+                               + " including the # and the"
+                               + " 4 numbers after it.")
 
 
 class HelpCommand(Command):
