@@ -4,4 +4,4 @@ CREATE TABLE Permissions (
 );
 
 INSERT INTO Permissions (discord_id, can_kill)
-SELECT DISTINCT (discord_id, FALSE) FROM banned_phrases;
+SELECT DISTINCT discord_id, FALSE FROM banned_phrases;

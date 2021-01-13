@@ -23,9 +23,9 @@ class Command(ABC):
     async def execute(self, message):
         pass
 
-    def get_args(self, message):
+    def get_args(self, message, lower=True):
         messy_args = message.clean_content[len(f'okuyasu {self.name} '):]
-        return clean_string(messy_args)
+        return clean_string(messy_args, lower=lower)
 
     def format_help_line(self):
         return f'okuyasu {self.name}: {self.help_line}'
@@ -55,24 +55,26 @@ class KillCommand(Command):
     name = 'kill'
 
     async def execute(self, message):
-        username = self.get_args(message)
-        server_id = message.guild.id
-        if not db.can_kill(str(server_id)):
+        username = self.get_args(message, lower=False)
+        server_id = str(message.guild.id)
+        channel = message.channel
+        if not await db.can_kill(server_id):
             await channel.send('No.')
             return
         delete_jobs = []
+        print(username)
+        print(message.author.discriminator)
+        print(message.author.name)
         for text_channel in message.guild.channels:
-            if not isinstance(text_channel, discord.TextChannel):
-                pass
+            if text_channel.type != discord.ChannelType.text:
+                continue
             async for prev_message in text_channel.history():
                 name = prev_message.author.name
                 discriminator = prev_message.author.discriminator
                 #TODO Verify This Works
                 if f'{name}#{discriminator}' == username:
                     delete_jobs.append(prev_message.delete())
-        channel = message.channel
-        await asyncio.gather(message.delete(), 
-                             db.disable_kill(server_id),
+        await asyncio.gather(db.disable_kill(server_id),
                              *delete_jobs)
         await channel.send(file=discord.File('assets/hando.jpg'))
         await channel.send(file=discord.File('assets/ideletedthisuser.jpg'))
@@ -107,7 +109,7 @@ class WhatsBannedCommand(NeedsGuildCommand):
     help_line = 'DM you a list of the banned words for this server'
 
     async def execute(self, message):
-        server_id = message.guild.id
+        server_id = str(message.guild.id)
         banned_phrases = await db.get_banned_phrases_for_server(server_id)
         banned_dict = {}
         for phrase in banned_phrases:
@@ -198,7 +200,8 @@ _COMMANDS = [
     BanContainingCommand(),
     BanWordCommand(),
     UnbanCommand(),
-    WhatsBannedCommand()
+    WhatsBannedCommand(),
+    KillCommand()
 ]
 
 _COMMANDS = {command.name: command for command in _COMMANDS}

@@ -57,7 +57,7 @@ class PSQLConnectionSingleton:
     async def disable_kill(self, server_id):
         async with self.pool.acquire() as connection:
             await connection.execute(
-                'UPDATE TABLE Permissions'
+                'UPDATE Permissions'
                 + ' SET can_kill=FALSE'
                 + ' WHERE discord_id = $1',
                 server_id
