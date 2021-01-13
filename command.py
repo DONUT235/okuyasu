@@ -62,9 +62,6 @@ class KillCommand(Command):
             await channel.send('No.')
             return
         delete_jobs = []
-        print(username)
-        print(message.author.discriminator)
-        print(message.author.name)
         for text_channel in message.guild.channels:
             if text_channel.type != discord.ChannelType.text:
                 continue
@@ -74,7 +71,7 @@ class KillCommand(Command):
                 #TODO Verify This Works
                 if f'{name}#{discriminator}' == username:
                     delete_jobs.append(prev_message.delete())
-        if(delete_jobs > 0):
+        if(len(delete_jobs) > 0):
             await asyncio.gather(db.disable_kill(server_id),
                                  *delete_jobs)
             await channel.send(file=discord.File('assets/hando.jpg'))
