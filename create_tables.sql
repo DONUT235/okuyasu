@@ -65,6 +65,16 @@ ALTER SEQUENCE public.banned_phrases_id_seq OWNED BY public.banned_phrases.id;
 
 
 --
+-- Name: permissions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.permissions (
+    discord_id character varying NOT NULL,
+    can_kill boolean NOT NULL
+);
+
+
+--
 -- Name: banned_phrases id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -85,6 +95,14 @@ ALTER TABLE ONLY public.banned_phrases
 
 ALTER TABLE ONLY public.banned_phrases
     ADD CONSTRAINT banned_phrases_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: permissions permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.permissions
+    ADD CONSTRAINT permissions_pkey PRIMARY KEY (discord_id);
 
 
 --
