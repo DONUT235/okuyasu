@@ -14,7 +14,7 @@ class PSQLConnectionSingleton:
         async with self.pool.acquire() as connection:
             return await connection.fetch(
                 'SELECT value, match_type FROM banned_phrases'
-                + ' WHERE discord_id = $1',
+                ' WHERE discord_id = $1',
                 str(server_id)
             )
 
@@ -22,8 +22,9 @@ class PSQLConnectionSingleton:
         try:
             async with self.pool.acquire() as connection:
                 await connection.execute(
-                    'INSERT INTO banned_phrases (discord_id, value, match_type)'
-                    + ' VALUES ($1, $2, $3)',
+                    'INSERT INTO banned_phrases'
+                    ' (discord_id, value, match_type)'
+                    ' VALUES ($1, $2, $3)',
                     server_id, phrase, match_type
                 )
         except UniqueViolationError:
@@ -33,7 +34,7 @@ class PSQLConnectionSingleton:
         async with self.pool.acquire() as connection:
             await connection.execute(
                 'DELETE FROM banned_phrases'
-                + ' WHERE discord_id = $1 AND value = $2',
+                ' WHERE discord_id = $1 AND value = $2',
                 server_id, phrase
             )
 
@@ -41,14 +42,14 @@ class PSQLConnectionSingleton:
         async with self.pool.acquire() as connection:
             result = await connection.fetch(
                 'SELECT can_kill'
-                + ' FROM Permissions'
-                + ' WHERE discord_id = $1',
+                ' FROM Permissions'
+                ' WHERE discord_id = $1',
                 server_id
             )
             if len(result) == 0:
                 await connection.execute(
                     'INSERT INTO Permissions (discord_id, can_kill)'
-                    + ' VALUES ($1, FALSE)',
+                    ' VALUES ($1, FALSE)',
                     server_id
                 )
                 return False
@@ -58,8 +59,8 @@ class PSQLConnectionSingleton:
         async with self.pool.acquire() as connection:
             await connection.execute(
                 'UPDATE Permissions'
-                + ' SET can_kill=FALSE'
-                + ' WHERE discord_id = $1',
+                ' SET can_kill=FALSE'
+                ' WHERE discord_id = $1',
                 server_id
             )
 
