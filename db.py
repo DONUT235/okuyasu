@@ -15,7 +15,7 @@ class PSQLConnectionSingleton:
             return await connection.fetch(
                 'SELECT value, match_type FROM banned_phrases'
                 ' WHERE discord_id = $1',
-                server_id
+                int(server_id)
             )
 
     async def ban_phrase(self, server_id, phrase, match_type='word'):
@@ -25,7 +25,7 @@ class PSQLConnectionSingleton:
                     'INSERT INTO banned_phrases'
                     ' (discord_id, value, match_type)'
                     ' VALUES ($1, $2, $3)',
-                    server_id, phrase, match_type
+                    int(server_id), phrase, match_type
                 )
         except UniqueViolationError:
             pass
@@ -35,7 +35,7 @@ class PSQLConnectionSingleton:
             await connection.execute(
                 'DELETE FROM banned_phrases'
                 ' WHERE discord_id = $1 AND value = $2',
-                server_id, phrase
+                int(server_id), phrase
             )
 
     async def can_kill(self, server_id):
@@ -44,13 +44,13 @@ class PSQLConnectionSingleton:
                 'SELECT can_kill'
                 ' FROM Permissions'
                 ' WHERE discord_id = $1',
-                server_id
+                int(server_id)
             )
             if len(result) == 0:
                 await connection.execute(
                     'INSERT INTO Permissions (discord_id, can_kill)'
                     ' VALUES ($1, FALSE)',
-                    server_id
+                    int(server_id)
                 )
                 return False
             return result[0]['can_kill']
@@ -61,7 +61,7 @@ class PSQLConnectionSingleton:
                 'UPDATE Permissions'
                 ' SET can_kill=FALSE'
                 ' WHERE discord_id = $1',
-                server_id
+                int(server_id)
             )
 
 db = PSQLConnectionSingleton()

@@ -45,12 +45,14 @@ async def handle_moderate_command(message):
         server_id = message.guild.id
         for banned_phrase in await db.get_banned_phrases_for_server(server_id):
             matcher = get_matcher(
-                banned_phrase['match_type'], banned_phrase['value'])
+                banned_phrase['match_type'], banned_phrase['value']
+            )
             if await matcher.matches(clean_message(message)):
                 channel = message.channel
                 await message.delete()
                 await channel.send(
-                    file=discord.File('assets/ideletedthispost.jpg'))
+                    file=discord.File('assets/ideletedthispost.jpg')
+                )
 
 def is_okuyasu_command(message):
     #TODO Check for user privileges
