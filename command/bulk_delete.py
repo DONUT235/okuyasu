@@ -26,7 +26,7 @@ class DeleteNCommand(Command):
         await channel.send(file=discord.File('assets/hando.jpg'))
         await channel.send(file=discord.File('assets/thankme.jpg'))
 
-class KillCommand(Command):
+class KillCommand(NeedsGuildCommand):
     help_line = 'Delete ALL messages sent by <user>'
     name = 'kill'
 
