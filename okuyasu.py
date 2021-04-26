@@ -19,7 +19,7 @@ client = make_client()
 @client.event
 async def on_connect():
     await db.get_connection()
-    
+
 @client.event
 async def on_ready():
     print('Connected')
