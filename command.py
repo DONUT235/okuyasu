@@ -56,7 +56,7 @@ class KillCommand(Command):
 
     async def execute(self, message):
         username = self.get_args(message, lower=False)
-        server_id = str(message.guild.id)
+        server_id = message.guild.id
         channel = message.channel
         if not await db.can_kill(server_id):
             await channel.send('No.')
@@ -118,7 +118,7 @@ class WhatsBannedCommand(NeedsGuildCommand):
     help_line = 'DM you a list of the banned words for this server'
 
     async def execute(self, message):
-        server_id = str(message.guild.id)
+        server_id = message.guild.id
         banned_phrases = await db.get_banned_phrases_for_server(server_id)
         banned_dict = {}
         for phrase in banned_phrases:
@@ -163,7 +163,8 @@ class BanCommand(NeedsGuildCommand):
             #This is potentially dangerous!
             return
         await db.ban_phrase(
-            str(server_id), phrase_to_ban, self.db_name)
+            server_id, phrase_to_ban, self.db_name
+        )
 
         await message.channel.send(
             f'The phrase {self.format(phrase_to_ban)} is now banned.')
@@ -196,7 +197,7 @@ class UnbanCommand(NeedsGuildCommand):
     async def execute(self, message):
         phrase_to_unban = self.get_args(message)
 
-        await db.unban_phrase(str(message.guild.id), phrase_to_unban)
+        await db.unban_phrase(message.guild.id, phrase_to_unban)
 
         await message.channel.send(
             f'The phrase "{phrase_to_unban}" is now unbanned.')

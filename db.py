@@ -15,7 +15,7 @@ class PSQLConnectionSingleton:
             return await connection.fetch(
                 'SELECT value, match_type FROM banned_phrases'
                 ' WHERE discord_id = $1',
-                str(server_id)
+                server_id
             )
 
     async def ban_phrase(self, server_id, phrase, match_type='word'):
