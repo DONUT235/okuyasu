@@ -61,19 +61,25 @@ class KillCommand(Command):
         if not await db.can_kill(server_id):
             await channel.send('No.')
             return
-        delete_jobs = []
+        else:
+            await channel.send('OK!')
+        deleted_any = False
         for text_channel in message.guild.channels:
-            if text_channel.type != discord.ChannelType.text:
-                continue
-            async for prev_message in text_channel.history():
-                name = prev_message.author.name
-                discriminator = prev_message.author.discriminator
-                #TODO Verify This Works
-                if f'{name}#{discriminator}' == username:
-                    delete_jobs.append(prev_message.delete())
-        if(len(delete_jobs) > 0):
-            await asyncio.gather(db.disable_kill(server_id),
-                                 *delete_jobs)
+            try:
+                if text_channel.type != discord.ChannelType.text:
+                    continue
+                async for prev_message in text_channel.history(limit=None):
+                    name = prev_message.author.name
+                    discriminator = prev_message.author.discriminator
+                    #TODO Verify This Works
+                    if f'{name}#{discriminator}' == username:
+                        await prev_message.delete()
+                        deleted_any = True
+            except discord.DiscordException:
+                pass
+
+        if deleted_any:
+            await db.disable_kill(server_id)
             await channel.send(file=discord.File('assets/hando.jpg'))
             await channel.send(file=discord.File('assets/ideletedthisuser.jpg'))
         else:
@@ -91,7 +97,7 @@ class HelpCommand(Command):
         commands = _COMMANDS.values()
         if message.guild is None:
             commands = filter(
-                lambda command: not command.needs_guild, 
+                lambda command: not command.needs_guild,
                 commands)
         help_messages = [command.format_help_line() for command in commands]
         help_message = "\n".join(help_messages)
