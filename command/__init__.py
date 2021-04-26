@@ -47,7 +47,7 @@ register(
 )
 
 def get_command(commandName):
-    if commandName in Command._COMMANDS:
-        return Command._COMMANDS[commandName]
+    if commandName in _COMMANDS:
+        return _COMMANDS[commandName]
     else:
         return NullCommand()
