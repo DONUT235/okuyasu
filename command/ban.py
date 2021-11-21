@@ -73,7 +73,7 @@ class BanCommand(NeedsGuildCommand):
 
 class BanRegexCommand(BanCommand):
     help_line = (
-        'Delete all messages matching aPython-flavored regular expression.'
+        'Delete all messages matching a Python-flavored regular expression.'
     )
     name = 'ban_regex'
     db_name = db_names.REGEX
