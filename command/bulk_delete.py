@@ -5,6 +5,7 @@ import asyncio
 import discord
 
 class DeleteNCommand(Command):
+    display_name = 'delete <n>'
     help_line = 'Delete the <n> most recent messages in this channel.'
     name = 'delete'
 
@@ -29,6 +30,7 @@ class DeleteNCommand(Command):
 class KillCommand(NeedsGuildCommand):
     help_line = 'Delete ALL messages sent by <user>'
     name = 'kill'
+    display_name = 'kill <user>'
 
     async def execute(self, message):
         username = self.get_args(message, lower=False)

@@ -15,6 +15,10 @@ class Command(ABC):
     def name(self) -> str:
         return ''
 
+    @property
+    def display_name(self) -> str:
+        return self.name
+
     @abstractmethod
     async def execute(self, message):
         pass
@@ -24,7 +28,7 @@ class Command(ABC):
         return clean_string(messy_args, lower=lower)
 
     def format_help_line(self):
-        return f'okuyasu {self.name}: {self.help_line}'
+        return f'okuyasu {self.display_name}: {self.help_line}'
 
 class NeedsGuildCommand(Command):
     needs_guild = True
